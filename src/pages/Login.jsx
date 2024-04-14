@@ -13,7 +13,7 @@ const Login = () => {
     if (isLoginSuccessful) {
       localStorage.setItem("token", "dummy-token");
 
-      navigate("/dashboard");
+      navigate("/");
     } else {
       console.log("Login failed");
     }
