@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Heading, Tabs, TabList, TabPanels, Tab, TabPanel, Table, Thead, Tbody, Tr, Th, Td, Button, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter, Image } from "@chakra-ui/react";
+import { Box, Heading, Tabs, TabList, TabPanels, Tab, TabPanel, Table, Thead, Tbody, Tr, Th, Td, Button, useDisclosure } from "@chakra-ui/react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 const Index = () => {
@@ -27,7 +28,7 @@ const Index = () => {
   const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {
-    // Fetch data from backend API
+   
     fetchSales();
     fetchBookings();
     fetchMembers();
@@ -35,28 +36,28 @@ const Index = () => {
   }, []);
 
   const fetchSales = async () => {
-    // TODO: Fetch sales data from backend API
+   
     const response = await fetch("/api/sales");
     const data = await response.json();
     setSales(data);
   };
 
   const fetchBookings = async () => {
-    // TODO: Fetch bookings data from backend API
+   
     const response = await fetch("/api/bookings");
     const data = await response.json();
     setBookings(data);
   };
 
   const fetchMembers = async () => {
-    // TODO: Fetch members data from backend API
+   
     const response = await fetch("/api/members");
     const data = await response.json();
     setMembers(data);
   };
 
   const fetchPayments = async () => {
-    // TODO: Fetch payments data from backend API
+   
     const response = await fetch("/api/payments");
     const data = await response.json();
     setPayments(data);
@@ -68,23 +69,10 @@ const Index = () => {
   };
 
   const handleDeleteMember = async (memberId) => {
-    // TODO: Delete member from backend API
+   
     await fetch(`/api/members/${memberId}`, {
       method: "DELETE",
     });
-    fetchMembers();
-  };
-
-  const handleUpdateMember = async () => {
-    // TODO: Update member in backend API
-    await fetch(`/api/members/${selectedMember.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(selectedMember),
-    });
-    onClose();
     fetchMembers();
   };
 
@@ -195,46 +183,6 @@ const Index = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Edit Member</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl>
-              <FormLabel>Name</FormLabel>
-              <Input
-                value={selectedMember?.name || ""}
-                onChange={(e) =>
-                  setSelectedMember({
-                    ...selectedMember,
-                    name: e.target.value,
-                  })
-                }
-              />
-            </FormControl>
-            <FormControl mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                value={selectedMember?.email || ""}
-                onChange={(e) =>
-                  setSelectedMember({
-                    ...selectedMember,
-                    email: e.target.value,
-                  })
-                }
-              />
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleUpdateMember}>
-              Save
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Box>
   );
 };
