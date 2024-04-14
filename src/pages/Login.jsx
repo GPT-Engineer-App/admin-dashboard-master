@@ -8,18 +8,12 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    const isLoginSuccessful = true;
 
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      navigate("/");
+    if (isLoginSuccessful) {
+      localStorage.setItem("token", "dummy-token");
+
+      navigate("/dashboard");
     } else {
       console.log("Login failed");
     }
