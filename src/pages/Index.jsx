@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Heading, Tabs, TabList, TabPanels, Tab, TabPanel, Table, Thead, Tbody, Tr, Th, Td, Button, useDisclosure } from "@chakra-ui/react";
+import { Box, Heading, Tabs, TabList, TabPanels, Tab, TabPanel, Table, Thead, Tbody, Tr, Th, Td, Button, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 const Index = () => {
@@ -26,9 +25,9 @@ const Index = () => {
   const [payments, setPayments] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedMember, setSelectedMember] = useState(null);
+  const [editedMember, setEditedMember] = useState({ name: "", email: "" });
 
   useEffect(() => {
-   
     fetchSales();
     fetchBookings();
     fetchMembers();
@@ -36,28 +35,24 @@ const Index = () => {
   }, []);
 
   const fetchSales = async () => {
-   
     const response = await fetch("/api/sales");
     const data = await response.json();
     setSales(data);
   };
 
   const fetchBookings = async () => {
-   
     const response = await fetch("/api/bookings");
     const data = await response.json();
     setBookings(data);
   };
 
   const fetchMembers = async () => {
-   
     const response = await fetch("/api/members");
     const data = await response.json();
     setMembers(data);
   };
 
   const fetchPayments = async () => {
-   
     const response = await fetch("/api/payments");
     const data = await response.json();
     setPayments(data);
@@ -65,11 +60,23 @@ const Index = () => {
 
   const handleEditMember = (member) => {
     setSelectedMember(member);
+    setEditedMember({ name: member.name, email: member.email });
     onOpen();
   };
 
+  const handleUpdateMember = async () => {
+    await fetch(`/api/members/${selectedMember.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editedMember),
+    });
+    onClose();
+    fetchMembers();
+  };
+
   const handleDeleteMember = async (memberId) => {
-   
     await fetch(`/api/members/${memberId}`, {
       method: "DELETE",
     });
@@ -183,6 +190,26 @@ const Index = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Member</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl>
+              <FormLabel>Name</FormLabel>
+              <Input value={editedMember.name} onChange={(e) => setEditedMember({ ...editedMember, name: e.target.value })} />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Email</FormLabel>
+              <Input value={editedMember.email} onChange={(e) => setEditedMember({ ...editedMember, email: e.target.value })} />
+            </FormControl>
+            <Button mt={4} colorScheme="blue" onClick={handleUpdateMember}>
+              Update
+            </Button>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
