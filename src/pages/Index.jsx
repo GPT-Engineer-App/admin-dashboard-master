@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Heading, Tabs, TabList, TabPanels, Tab, TabPanel, Table, Thead, Tbody, Tr, Th, Td, Button, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
-const Index = () => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -214,4 +214,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Dashboard;
